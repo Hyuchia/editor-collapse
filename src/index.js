@@ -1,15 +1,10 @@
-import { make } from "@groupher/editor-utils";
 /**
  * Build styles
  */
 import css from "./styles/index.css";
-import { MODE } from "./constant";
 
-import RowModeIcon from "./icon/row_mode.svg";
-import ColumnModeIcon from "./icon/column_mode.svg";
 
 import UI from "./ui/index";
-import { isValidData } from "./helper";
 
 /**
  * Collapse Block for the Editor.js.
@@ -36,13 +31,15 @@ export default class Collapse {
   constructor({ data, config, api }) {
     this.api = api;
 
+    const validTitle = data.title && typeof data.title === 'string';
+    const validContent = data.content && typeof data.content === 'string';
+
     const defaultData = {
-      mode: MODE.ROW,
-      title: "",
-      content: "",
+      title: validTitle ? data.title : "",
+      content: validContent ? data.content : "",
     };
 
-    this._data = isValidData(data) ? data : defaultData;
+    this._data = defaultData;
 
     this.ui = new UI({
       data: this._data,
@@ -110,56 +107,6 @@ export default class Collapse {
   }
 
   /**
-   * render Setting buttons
-   * @public
-   */
-  // renderSettings() {
-  //   const Wrapper = make("div");
-
-  //   const settings = [
-  //     {
-  //       title: "展开模式",
-  //       action: MODE.ROW,
-  //       icon: RowModeIcon,
-  //     },
-  //     {
-  //       title: "预览模式",
-  //       action: MODE.COLUMN,
-  //       icon: ColumnModeIcon,
-  //     },
-  //   ];
-
-  //   settings.forEach((item) => {
-  //     const itemEl = make("div", this.CSS.settingsButton, {
-  //       innerHTML: item.icon,
-  //     });
-
-  //     if (item.action === MODE.ROW) {
-  //       this._data.mode === MODE.ROW
-  //         ? itemEl.classList.add(this.CSS.settingsButtonActive)
-  //         : itemEl.classList.remove(this.CSS.settingsButtonActive);
-  //     } else {
-  //       this._data.mode === MODE.COLUMN
-  //         ? itemEl.classList.add(this.CSS.settingsButtonActive)
-  //         : itemEl.classList.remove(this.CSS.settingsButtonActive);
-  //     }
-
-  //     itemEl.addEventListener("click", () => {
-  //       this._data.mode = item.action;
-  //       this.reRender(this._data);
-  //     });
-
-  //     this.api.tooltip.onHover(itemEl, item.title, {
-  //       placement: "top",
-  //     });
-
-  //     Wrapper.appendChild(itemEl);
-  //   });
-
-  //   return Wrapper;
-  // }
-
-  /**
    * Extract Tool's data from the view
    * @param {HTMLDivElement} toolsContent - Paragraph tools rendered view
    * @returns {DelimiterData} - saved data
@@ -167,7 +114,6 @@ export default class Collapse {
    */
   save(toolsContent) {
     const data = this.ui.data;
-    // console.log("collapse save: ", data);
     return data;
   }
 
