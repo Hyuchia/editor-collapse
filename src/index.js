@@ -63,6 +63,15 @@ export default class Collapse {
     return false;
   }
 
+  static get sanitize() {
+    return {
+      content: {
+        br: true,
+        div: true,
+      },
+    };
+  }
+
   /**
    * @return {object} - Collapse Tool styles
    * @constructor
